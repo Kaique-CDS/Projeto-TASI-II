@@ -1,0 +1,106 @@
+{
+  "info": {
+    "name": "API de Gerenciamento de Pedidos - TASI II",
+    "description": "Coleção Postman com os cenários obrigatórios de evidência e testes manuais da API de Gerenciamento de Pedidos.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Criação de Pedido Válido (201)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente\": \"Carlos Silva\",\n  \"tipo\": \"entrega\",\n  \"valor\": 350,\n  \"prioridade\": \"normal\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/pedidos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["pedidos"]
+        }
+      }
+    },
+    {
+      "name": "02 - Validação de Pedido Inválido (400)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente\": \"   \",\n  \"tipo\": \"entrega\",\n  \"valor\": -10,\n  \"prioridade\": \"normal\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/pedidos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["pedidos"]
+        }
+      }
+    },
+    {
+      "name": "03 - Listagem de Pedidos (200)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/pedidos",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["pedidos"]
+        }
+      }
+    },
+    {
+      "name": "04 - Consulta de ID Inexistente (404)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/pedidos/999",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["pedidos", "999"]
+        }
+      }
+    },
+    {
+      "name": "05 - Atualização de Status Válido (200)",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"cancelado\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/pedidos/1/status",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["pedidos", "1", "status"]
+        }
+      }
+    }
+  ]
+}
