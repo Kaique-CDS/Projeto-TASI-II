@@ -1,0 +1,19 @@
+{
+  "name": "api-pedidos",
+  "version": "1.0.0",
+  "description": "Projeto pratico avaliativo - API de Gerenciamento de Pedidos",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest"
+  },
+  "author": "Kaique Correa da Silva",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "supertest": "^7.2.2"
+  }
+}
