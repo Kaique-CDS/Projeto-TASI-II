@@ -32,6 +32,15 @@ O projeto foi dividido no padrão de camadas pedido na atividade (`routes`, `con
 - `tests/pedidos.test.js`: testes automatizados das rotas e regras usando Jest e Supertest.
 - `evidencias/`: pasta com os prints dos testes feitos no Postman.
 
+### Padrão implementado
+
+Foi usada a **arquitetura em camadas** (Routes → Controllers → Services), parecida com um MVC sem a camada de View:
+
+- **Routes** só mapeiam método + URL para uma função do controller.
+- **Controllers** cuidam apenas do HTTP (ler `req`, responder com o status code) e não têm regra de negócio.
+- **Services** têm as regras de negócio e os dados em memória, sem depender do Express.
+- **Tratamento centralizado de erros**: o service lança erros com `status` (400/404) e o middleware do `app.js` transforma em resposta JSON. Qualquer erro sem `status` é tratado como erro inesperado e retorna **500**, sem ser confundido com erro de validação.
+
 ## Regras de validação e valores aceitos
 
 Para cadastrar um pedido (`POST /pedidos`), todos os campos abaixo são obrigatórios:
@@ -118,6 +127,34 @@ Se tentar fazer uma transição fora dessa ordem ou passar um status que não ex
 - Se a transição for válida: retorna **200 OK** com o pedido atualizado.
 - Se o status ou a transição forem inválidos: retorna **400 Bad Request**.
 - Se o ID não existir: retorna **404 Not Found**.
+
+## Testes
+
+### Testes automatizados (Jest + Supertest)
+
+Executar com `npm test`. O arquivo `tests/pedidos.test.js` cobre 9 cenários:
+
+1. `POST /pedidos` válido retorna 201 com status `recebido`.
+2. `POST /pedidos` com cliente vazio ou só com espaços retorna 400.
+3. `POST /pedidos` com valor menor ou igual a zero retorna 400.
+4. `POST /pedidos` com tipo ou prioridade inválidos retorna 400.
+5. `GET /pedidos` lista os pedidos com 200.
+6. `GET /pedidos/:id` retorna 200 se existir e 404 se não existir.
+7. `PATCH /pedidos/:id/status` com transições permitidas retorna 200.
+8. `PATCH /pedidos/:id/status` com transição inválida retorna 400 e com ID inexistente retorna 404.
+9. Erro inesperado no servidor retorna 500.
+
+### Testes manuais (Postman)
+
+O arquivo `postman_collection.json` pode ser importado no Postman. Os prints estão na pasta `evidencias/`:
+
+| Arquivo | Cenário |
+|---|---|
+| `01-criacao.jpeg` | `POST /pedidos` válido → **201 Created** |
+| `02-validacao.jpeg` | `POST /pedidos` com cliente vazio e valor negativo → **400 Bad Request** |
+| `03-listagem.jpeg` | `GET /pedidos` → **200 OK** |
+| `04-consulta-inexistente.jpeg` | `GET /pedidos/999` → **404 Not Found** |
+| `05-atualizacao.jpeg` | `PATCH /pedidos/1/status` com `cancelado` → **200 OK** |
 
 ## Uso de IA
 
